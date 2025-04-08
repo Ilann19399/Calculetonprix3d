@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculateur Prix Impression 3D</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 5px; margin-top: 5px; }
+    button { margin-top: 20px; padding: 10px 15px; font-size: 16px; }
+    .resultat { margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Calculateur de prix d'impression 3D</h1>
+
+  <label>Coût matière par gramme (€):<input type="number" id="matiere" value="0.05" step="0.01"></label>
+  <label>Temps d'impression (heures):<input type="number" id="temps" value="3" step="0.1"></label>
+  <label>Consommation machine (kWh/h):<input type="number" id="conso" value="0.1" step="0.01"></label>
+  <label>Prix du kWh (€):<input type="number" id="kwh" value="0.2" step="0.01"></label>
+  <label>Main d'œuvre (€ / heure):<input type="number" id="main" value="15" step="0.1"></label>
+  <label>Poids de la pièce (grammes):<input type="number" id="poids" value="50"></label>
+  <label>Frais fixes (€):<input type="number" id="frais" value="2"></label>
+  <label>Marge bénéficiaire (%):<input type="number" id="marge" value="30"></label>
+
+  <button onclick="calculer()">Calculer le prix de vente</button>
+
+  <div class="resultat" id="resultat"></div>
+
+  <script>
+    function calculer() {
+      const matiere = parseFloat(document.getElementById("matiere").value);
+      const temps = parseFloat(document.getElementById("temps").value);
+      const conso = parseFloat(document.getElementById("conso").value);
+      const kwh = parseFloat(document.getElementById("kwh").value);
+      const main = parseFloat(document.getElementById("main").value);
+      const poids = parseFloat(document.getElementById("poids").value);
+      const frais = parseFloat(document.getElementById("frais").value);
+      const marge = parseFloat(document.getElementById("marge").value);
+
+      const coutMatiere = matiere * poids;
+      const coutEnergie = conso * kwh * temps;
+      const coutMainOeuvre = main * temps;
+      const coutTotal = coutMatiere + coutEnergie + coutMainOeuvre + frais;
+      const prixVente = coutTotal * (1 + marge / 100);
+
+      document.getElementById("resultat").innerHTML = `
+        <strong>Détail du calcul :</strong><br>
+        Coût matière : ${coutMatiere.toFixed(2)} €<br>
+        Coût énergie : ${coutEnergie.toFixed(2)} €<br>
+        Coût main-d'œuvre : ${coutMainOeuvre.toFixed(2)} €<br>
+        Frais fixes : ${frais.toFixed(2)} €<br>
+        <strong>Coût total : ${coutTotal.toFixed(2)} €</strong><br>
+        <strong>Prix de vente conseillé : ${prixVente.toFixed(2)} €</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
